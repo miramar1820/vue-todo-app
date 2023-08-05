@@ -3,7 +3,7 @@
         aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
-                <RouterLink class="navbar-item" to="/">
+                <RouterLink class="navbar-item" to="/" exact>
                     <img alt="Vue logo" class="logo" src="@/assets/logo.svg"
                         width="28" height="28" />
                 </RouterLink>
@@ -28,7 +28,6 @@
                         <a class="navbar-link">
                             More
                         </a>
-
                         <div class="navbar-dropdown">
                             <a class="navbar-item">
                                 About
