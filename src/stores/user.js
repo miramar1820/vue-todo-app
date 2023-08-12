@@ -12,10 +12,12 @@ export const useAuthStore = defineStore("authStore", {
   state: () => ({
     user: null,
     error: null,
+    loading: false,
   }),
   getters: {
     isLoggedIn: (state) => state.user !== null,
     userError: (state) => state.error,
+    isLoading: (state) => state.loading,
   },
   actions: {
     init() {
@@ -37,9 +39,11 @@ export const useAuthStore = defineStore("authStore", {
     },
     async login(email, password) {
       try {
+        this.loading = true;
         const response = await loginAccountEmailPassword(email, password);
         this.user = response.user ? response.user : null;
         this.error = null;
+        this.loading = false;
         return true;
       } catch (error) {
         this.user = null;
@@ -50,9 +54,11 @@ export const useAuthStore = defineStore("authStore", {
     },
     async createAccount(email, password) {
       try {
+        this.loading = true;
         const response = await createAccountEmailPassword(email, password);
         this.user = response.user ? response.user : null;
         this.error = null;
+        this.loading = false;
         return true;
       } catch (error) {
         this.user = null;
@@ -63,9 +69,12 @@ export const useAuthStore = defineStore("authStore", {
     },
     async logoutAccount() {
       try {
+        this.loading = true;
         await logOut();
         this.user = null;
         this.error = null;
+        this.loading = false;
+        return true;
       } catch (error) {
         this.user = null;
         this.error = error;
