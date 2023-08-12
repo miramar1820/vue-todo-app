@@ -1,5 +1,5 @@
 <template>
-    <div class="is-flex fullheight">
+    <div class="is-flex fullheight is-align-items-center">
         <div class="container">
             <div class="columns is-centered">
                 <div class="column is-5-tablet is-4-desktop is-3-widescreen">
@@ -84,6 +84,6 @@ const loginUser = async () => {
     text-align: center;
 }
 .fullheight {
-    flex: 1 0 auto;
+    flex: 1 0 auto
 }
 </style>

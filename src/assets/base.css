@@ -58,3 +58,6 @@
   font-weight: normal;
 }
 
+html, body {
+  height: 100%;
+}
