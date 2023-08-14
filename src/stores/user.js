@@ -37,6 +37,17 @@ export const useAuthStore = defineStore("authStore", {
       //   }, reject());
       // });
     },
+    async loginGooglePopup() {
+      try {
+        await loginWithGooglePopup();
+        return true;
+      } catch (error) {
+        this.user = null;
+        this.error = error;
+        console.log(error);
+        return false;
+      }
+    },
     async login(email, password) {
       try {
         this.loading = true;
@@ -50,6 +61,8 @@ export const useAuthStore = defineStore("authStore", {
         this.error = error;
         console.log(error);
         return false;
+      } finally {
+        this.loading = false;
       }
     },
     async createAccount(email, password) {

@@ -1,5 +1,5 @@
 <template>
-    <footer class="footer">
+    <footer class="footer is-flex-align-items-flex-end mt-auto">
         <div class="content has-text-centered">
             <p>
                 <strong>Vue 3 App</strong> by <a href="mailto:miramar1820@gmail.com">Miras Maratov</a>. The source code is licensed

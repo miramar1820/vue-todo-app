@@ -10,7 +10,16 @@ import {
   browserSessionPersistence,
   setPersistence,
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -27,6 +36,9 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 setPersistence(auth, browserSessionPersistence);
+provider.setCustomParameters({
+  prompt: "select_account",
+});
 
 export const loginWithGooglePopup = () => signInWithPopup(auth, provider);
 

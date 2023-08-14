@@ -2,11 +2,28 @@
     <div class="is-flex fullheight is-align-items-center">
         <div class="container">
             <div class="columns is-centered">
+
                 <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+
+
                     <form @submit.prevent="loginUser" class="box">
-                        <div class="field">
-                            <h1 class="title is-4 centered">Login</h1>
+                        <div class="block">
+                            <h1 class="title is-4 has-text-centered">Login</h1>
                         </div>
+
+                        <div class="mb-3">
+                            <button class="button is-outlined is-fullwidth" @click.prevent="googleLoginPopup"
+                                :disabled="store.loading ? true : false">
+                                <span class="icon">
+                                    <i class="fa fa-google"></i>
+                                </span>
+                                <span>Login with Google</span>
+                            </button>
+                        </div>
+                        <div class="mb-3 has-text-centered">
+                            <span>or</span>
+                        </div>
+
                         <div class="field">
                             <label for="" class="label">Email</label>
                             <div class="control has-icons-left">
@@ -46,7 +63,7 @@
                                 <span>Login</span>
                             </button>
                         </div>
-                        <div class="field centered">
+                        <div class="field has-text-centered">
                             <div class="is-size-7">
                                 Don't have an account?
                                 <RouterLink to="/register" class="link"> Register </RouterLink>
@@ -66,7 +83,7 @@ import { useAuthStore } from '@/stores/user'
 
 const store = useAuthStore();
 const router = useRouter();
-const { login, isLoading } = store;
+const { login, loginGooglePopup } = store;
 
 const email = ref('')
 const password = ref('')
@@ -76,14 +93,15 @@ const loginUser = async () => {
         router.replace('/dashboard')
 }
 
+const googleLoginPopup = async () => {
+    if (await loginGooglePopup())
+        router.push('/dashboard')
+}
 
 </script>
 
 <style>
-.centered {
-    text-align: center;
-}
 .fullheight {
-    flex: 1 0 auto
+    height: 90%;
 }
 </style>

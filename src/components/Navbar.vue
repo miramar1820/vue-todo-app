@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar is-warning is-fixed" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-warning is-fixed-top" role="navigation" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
                 <RouterLink class="navbar-item" to="/" exact>
