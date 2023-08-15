@@ -11,10 +11,21 @@
                             <h1 class="title is-4 has-text-centered">Register</h1>
                         </div>
 
-                        <div class="field">
+                        <template v-for="val, i in validation">
+                            <div class="field">
+                                <Input :value="val.value" :label="val.label"
+                                    :valid="val.valid"
+                                    @updatemyinput="validate(i, $event)"
+                                    :iconClass="val.iconClass" />
+                            </div>
+                        </template>
+
+                        <!-- <div class="field">
                             <label for="" class="label">Full Name</label>
                             <div class="control has-icons-left">
-                                <input type="text" v-model="displayName" placeholder="e.g. John Doe" class="input" required>
+                                <input type="text" v-model="displayName"
+                                    placeholder="e.g. John Doe" class="input"
+                                    required>
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-user"></i>
                                 </span>
@@ -23,19 +34,25 @@
                         <div class="field">
                             <label for="" class="label">Email</label>
                             <div class="control has-icons-left">
-                                <input type="email" v-model="email" placeholder="e.g. bobsmith@gmail.com" class="input"
-                                    :class="msg.email !== '' ? 'is-danger' : ''" required>
+                                <input type="email" v-model="email"
+                                    placeholder="e.g. bobsmith@gmail.com"
+                                    class="input"
+                                    :class="msg.email !== '' ? 'is-danger' : ''"
+                                    required>
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-envelope"></i>
                                 </span>
                             </div>
-                            <div class="has-text-centered"><span class="has-text-danger" v-if="msg.email">{{ msg.email
-                            }}</span></div>
+                            <div class="has-text-centered"><span
+                                    class="has-text-danger" v-if="msg.email">{{
+                                        msg.email
+                                    }}</span></div>
                         </div>
                         <div class="field">
                             <label for="" class="label">Password</label>
                             <div class="control has-icons-left">
-                                <input type="password" v-model="password" placeholder="*******" class="input" required>
+                                <input type="password" v-model="password"
+                                    placeholder="*******" class="input" required>
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-lock"></i>
                                 </span>
@@ -44,19 +61,20 @@
                         <div class="field">
                             <label for="" class="label">Confirm Password</label>
                             <div class="control has-icons-left">
-                                <input type="password" v-model="confirmPassword" placeholder="*******" class="input"
-                                    required>
+                                <input type="password" v-model="confirmPassword"
+                                    placeholder="*******" class="input" required>
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-lock"></i>
                                 </span>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="error">
                             <span class="is-danger"> {{ store.error ?
                                 store.error : '' }}</span>
                         </div>
                         <div class="field mt-5">
-                            <button class="button is-success is-fullwidth" :disabled="!formReady"
+                            <button class="button is-success is-fullwidth"
+                                :disabled="!formReady"
                                 :class="store.loading ? 'is-loading' : ''">
                                 <span class="icon">
                                     <i class="fa fa-user-plus"></i>
@@ -67,7 +85,8 @@
                         <div class="field has-text-centered">
                             <div class="is-size-7">
                                 Have an account?
-                                <RouterLink to="/login" class="link"> Login </RouterLink>
+                                <RouterLink to="/login" class="link"> Login
+                                </RouterLink>
                             </div>
                         </div>
                     </form>
@@ -81,6 +100,7 @@
 import { ref, watch, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/user'
+import Input from '@/components/UI/Input.vue';
 
 const store = useAuthStore();
 const router = useRouter();
@@ -89,40 +109,62 @@ const displayName = ref('')
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
-const msg = reactive([])
+const validation = reactive(
+    [
+        {
+            label: "Fullname",
+            value: "",
+            pattern: /^[a-zA-Z ]{2,30}$/,
+            iconClass: 'fa fa-user'
+        },
+        {
+            label: "Email",
+            value: "",
+            pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+            iconClass: 'fa fa-envelope'
+        },
+        {
+            label: "Password",
+            value: "",
+            pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+            iconClass: 'fa fa-lock'
+        },
+        {
+            label: "Confirm",
+            value: "",
+            pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+            iconClass: 'fa fa-lock'
+        },
+    ]
+)
+
+
+validation.forEach((field) => {
+    field.valid = false;
+    // field.activated = false;
+})
 
 const registerUser = async () => {
     if (await store.createAccount(email.value, password.value))
         router.replace('/login')
 }
 
-const formReady = computed(() => {
-    console.log("msg every", msg.every((i) => i === ''));
-    return msg.every(i => i === '')
-})
+// const formReady = computed(() => {
+//     console.log("msg every", msg.every((i) => i === ''));
+//     return msg.every(i => i === '')
+// })
 
-watch(email, (val) => {
-    email.value = val;
-    validateEmail(val)
-})
+// watch(email, (val) => {
+//     email.value = val;
+//     validateEmail(val)
+// })
 
-
-
-const validateEmail = (value) => {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
-        msg['email'] = '';
-        console.log('validate');
-    } else {
-        msg['email'] = 'Invalid email';
-    }
+const validate = (i, val) => {
+    let field = validation[i];
+    field.value = val.trim();
+    // field.activated = true;
+    field.valid = field.pattern.test(field.value);
 }
 
-const validateName = (value) => {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
-        msg['email'] = '';
-    } else {
-        msg['email'] = 'Invalid email';
-    }
-}
 
 </script>
