@@ -24,6 +24,7 @@ export default {
         //   activated: { type: Boolean, required: true },
         // modelValue: { type: String, required: true },
     },
+    emits: ['updatemyinput'],
     data() {
         return {
             activated: this.value !== "",

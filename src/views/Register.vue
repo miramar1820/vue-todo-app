@@ -11,70 +11,80 @@
                             <h1 class="title is-4 has-text-centered">Register</h1>
                         </div>
 
-                        <template v-for="val, i in validation">
+                        <!-- <template v-for="val, i in validation">
                             <div class="field">
                                 <Input :value="val.value" :label="val.label"
                                     :valid="val.valid"
                                     @updatemyinput="validate(i, $event)"
                                     :iconClass="val.iconClass" />
                             </div>
-                        </template>
+                        </template> -->
 
-                        <!-- <div class="field">
+                        <div class="field">
                             <label for="" class="label">Full Name</label>
                             <div class="control has-icons-left">
-                                <input type="text" v-model="displayName"
-                                    placeholder="e.g. John Doe" class="input"
-                                    required>
+                                <input type="text" v-model="v$.fullName.$model"
+                                    placeholder="e.g. John Doe" class="input">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-user"></i>
                                 </span>
+                            </div>
+                            <div v-for="(error, index) in v$.fullName.$errors"
+                                :key="index">
+                                {{ error.$message }}
                             </div>
                         </div>
                         <div class="field">
                             <label for="" class="label">Email</label>
                             <div class="control has-icons-left">
-                                <input type="email" v-model="email"
+                                <input type="text" v-model="v$.email.$model"
                                     placeholder="e.g. bobsmith@gmail.com"
-                                    class="input"
-                                    :class="msg.email !== '' ? 'is-danger' : ''"
-                                    required>
+                                    class="input">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-envelope"></i>
                                 </span>
                             </div>
-                            <div class="has-text-centered"><span
-                                    class="has-text-danger" v-if="msg.email">{{
-                                        msg.email
-                                    }}</span></div>
+                            <div v-for="(error, index) in v$.email.$errors"
+                                :key="index">
+                                {{ error.$message }}
+                            </div>
                         </div>
                         <div class="field">
                             <label for="" class="label">Password</label>
                             <div class="control has-icons-left">
-                                <input type="password" v-model="password"
-                                    placeholder="*******" class="input" required>
+                                <input type="password"
+                                    v-model="state.password.password"
+                                    placeholder="*******" class="input">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-lock"></i>
                                 </span>
+                            </div>
+                            <div v-for="(error, index) in v$.password.password.$errors"
+                                :key="index">
+                                {{ error.$message }}
                             </div>
                         </div>
                         <div class="field">
                             <label for="" class="label">Confirm Password</label>
                             <div class="control has-icons-left">
-                                <input type="password" v-model="confirmPassword"
-                                    placeholder="*******" class="input" required>
+                                <input type="password"
+                                    v-model="state.password.confirm"
+                                    placeholder="*******" class="input">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-lock"></i>
                                 </span>
                             </div>
-                        </div> -->
+                            <div v-for="(error, index) in v$.password.confirm.$errors"
+                                :key="index">
+                                {{ error.$message }}
+                            </div>
+                        </div>
                         <div class="error">
                             <span class="is-danger"> {{ store.error ?
                                 store.error : '' }}</span>
                         </div>
                         <div class="field mt-5">
                             <button class="button is-success is-fullwidth"
-                                :disabled="!formReady"
                                 :class="store.loading ? 'is-loading' : ''">
                                 <span class="icon">
                                     <i class="fa fa-user-plus"></i>
@@ -98,17 +108,36 @@
 
 <script setup>
 import { ref, watch, reactive, computed } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/user'
 import Input from '@/components/UI/Input.vue';
 
 const store = useAuthStore();
 const router = useRouter();
-// const { createAccount } = store;
-const displayName = ref('')
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
+
+const state = reactive({
+    fullName: '',
+    email: '',
+    password: {
+        password: '',
+        confirm: '',
+    },
+})
+
+const rules = {
+    fullName: { required },
+    email: { required, email },
+    password: {
+        password: { required, minLength: minLength(6) },
+        confirm: { required, sameAs: sameAs(state.password.password) },
+    },
+}
+
+const v$ = useVuelidate(rules, state)
+console.log(v$);
+
 const validation = reactive(
     [
         {
@@ -145,9 +174,15 @@ validation.forEach((field) => {
 })
 
 const registerUser = async () => {
-    if (await store.createAccount(email.value, password.value))
-        router.replace('/login')
+    v$.value.$validate();
+    if (v$.value.$error) {
+        alert("Have errors!!!");
+    }
+    // if (await store.createAccount(email.value, password.value))
+    //     router.replace('/login')
 }
+
+
 
 // const formReady = computed(() => {
 //     console.log("msg every", msg.every((i) => i === ''));
