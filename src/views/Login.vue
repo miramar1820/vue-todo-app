@@ -12,7 +12,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <button class="button is-outlined is-fullwidth" @click.prevent="googleLoginPopup"
+                            <button class="button is-outlined is-fullwidth" @click.prevent="googleLoginRedirect"
                                 :disabled="store.loading ? true : false">
                                 <span class="icon">
                                     <i class="fa fa-google"></i>
@@ -83,7 +83,7 @@ import { useAuthStore } from '@/stores/user'
 
 const store = useAuthStore();
 const router = useRouter();
-const { login, loginGooglePopup } = store;
+const { login, loginGoogleRedirect } = store;
 
 const email = ref('')
 const password = ref('')
@@ -93,8 +93,8 @@ const loginUser = async () => {
         router.replace('/dashboard')
 }
 
-const googleLoginPopup = async () => {
-    if (await loginGooglePopup())
+const googleLoginRedirect = async () => {
+    if (await loginGoogleRedirect())
         router.push('/dashboard')
 }
 

@@ -5,7 +5,9 @@ import {
   createAccountEmailPassword,
   loginAccountEmailPassword,
   loginWithGooglePopup,
+  loginWithGoogleRedirect,
   logOut,
+  createUserAuth,
 } from "../firebase/config";
 
 export const useAuthStore = defineStore("authStore", {
@@ -24,6 +26,9 @@ export const useAuthStore = defineStore("authStore", {
       return new Promise((resolve) => {
         authStateChanged(async (user) => {
           this.user = user ? user : null;
+          if (user) {
+            await createUserAuth(user);
+          }
           resolve(true);
         });
       });
@@ -40,6 +45,17 @@ export const useAuthStore = defineStore("authStore", {
     async loginGooglePopup() {
       try {
         await loginWithGooglePopup();
+        return true;
+      } catch (error) {
+        this.user = null;
+        this.error = error;
+        console.log(error);
+        return false;
+      }
+    },
+    async loginGoogleRedirect() {
+      try {
+        await loginWithGoogleRedirect();
         return true;
       } catch (error) {
         this.user = null;

@@ -5,6 +5,7 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
   signOut,
   onAuthStateChanged,
   browserSessionPersistence,
@@ -35,12 +36,17 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+
 setPersistence(auth, browserSessionPersistence);
+
 provider.setCustomParameters({
   prompt: "select_account",
 });
 
+// Authorization block
+
 export const loginWithGooglePopup = () => signInWithPopup(auth, provider);
+export const loginWithGoogleRedirect = () => signInWithRedirect(auth, provider);
 
 export const createAccountEmailPassword = async (email, password) => {
   if (!email || !password) return;
@@ -57,7 +63,33 @@ export const logOut = async () => {
   return true;
 };
 
-export const authStateChanged = (callback) =>
+export const authStateChanged = (callback) => {
   onAuthStateChanged(auth, callback);
+};
+
+// Database block
+
+export const createUserAuth = async (userAuth, additinalInfo = {}) => {
+  if (!userAuth) return;
+  const userDocRef = doc(db, "users", userAuth.uid);
+
+  const userSnap = await getDoc(userDocRef);
+
+  if (!userSnap.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+    try {
+      await setDoc(userDocRef, {
+        displayName,
+        email,
+        createdAt,
+        ...additinalInfo,
+      });
+    } catch (error) {
+      console.log("Error has occured when created user", error.message);
+    }
+  }
+  return userDocRef;
+};
 
 export { app, db, auth };

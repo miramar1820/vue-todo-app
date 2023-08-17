@@ -13,10 +13,8 @@
 
                         <template v-for="val, i in validation">
                             <div class="field">
-                                <Input :value="val.value" :label="val.label"
-                                    :valid="val.valid"
-                                    @updatemyinput="validate(i, $event)"
-                                    :iconClass="val.iconClass" />
+                                <Input :value="val.value" :label="val.label" :valid="val.valid"
+                                    @updatemyinput="validate(i, $event)" :iconClass="val.iconClass" />
                             </div>
                         </template>
 
@@ -73,8 +71,7 @@
                                 store.error : '' }}</span>
                         </div>
                         <div class="field mt-5">
-                            <button class="button is-success is-fullwidth"
-                                :disabled="!formReady"
+                            <button class="button is-success is-fullwidth" :disabled="false"
                                 :class="store.loading ? 'is-loading' : ''">
                                 <span class="icon">
                                     <i class="fa fa-user-plus"></i>
@@ -138,6 +135,8 @@ const validation = reactive(
     ]
 )
 
+let pass = validation.filter(ob => ob.label === 'Password')
+console.log("pass", pass);
 
 validation.forEach((field) => {
     field.valid = false;
@@ -148,6 +147,10 @@ const registerUser = async () => {
     if (await store.createAccount(email.value, password.value))
         router.replace('/login')
 }
+
+watch(validation, (val) => {
+    console.log("watch", val);
+})
 
 // const formReady = computed(() => {
 //     console.log("msg every", msg.every((i) => i === ''));
