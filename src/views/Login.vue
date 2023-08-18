@@ -6,7 +6,7 @@
                 <div class="column is-5-tablet is-4-desktop is-3-widescreen">
 
 
-                    <form @submit.prevent="loginUser" class="box">
+                    <form @submit.prevent class="box">
                         <div class="block">
                             <h1 class="title is-4 has-text-centered">Login</h1>
                         </div>
@@ -27,8 +27,8 @@
                         <div class="field">
                             <label for="" class="label">Email</label>
                             <div class="control has-icons-left">
-                                <input type="email" v-model="email" placeholder="e.g. bobsmith@gmail.com" class="input"
-                                    required>
+                                <input type="email" v-model="form.email" placeholder="e.g. bobsmith@gmail.com"
+                                    class="input" :class="emailClass">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-envelope"></i>
                                 </span>
@@ -37,15 +37,14 @@
                         <div class="field">
                             <label for="" class="label">Password</label>
                             <div class="control has-icons-left">
-                                <input type="password" v-model="password" placeholder="*******" class="input" required>
+                                <input type="password" v-model="form.password" placeholder="*******" class="input">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-lock"></i>
                                 </span>
                             </div>
                         </div>
                         <div class="error">
-                            <span class="is-danger"> {{ store.error ?
-                                store.error : '' }}</span>
+                            <span class="is-danger" v-if="store.error"> {{ store.error }}</span>
                         </div>
                         <!-- <progress v-if="store.loading" class="progress is-small is-primary" max="100">15%</progress> -->
                         <!-- <span>{{ store.loading }}</span> -->
@@ -56,7 +55,8 @@
                                 </label>
                             </div> -->
                         <div class="field mt-5">
-                            <button class="button is-success is-fullwidth" :class="store.loading ? 'is-loading' : ''">
+                            <button class="button is-success is-fullwidth" :class="store.loading ? 'is-loading' : ''"
+                                @click="loginUser">
                                 <span class="icon">
                                     <i class="fa fa-sign-in"></i>
                                 </span>
@@ -77,19 +77,43 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/user'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email as emailValidator, minLength, sameAs } from '@vuelidate/validators'
+
 
 const store = useAuthStore();
 const router = useRouter();
 const { login, loginGoogleRedirect } = store;
 
-const email = ref('')
-const password = ref('')
+// const email = ref('')
+// const password = ref('')
+
+const form = reactive({
+    email: '',
+    password: ''
+})
+
+const rules = {
+    email: { required, email: emailValidator },
+    password: { required }
+}
+
+
+
+const v$ = useVuelidate(rules, form)
+
+
+const emailClass = computed(() => ({
+    'is-danger': v$.email.$error
+}))
 
 const loginUser = async () => {
-    if (await login(email.value, password.value))
+    const valid = await v$.value.$validate();
+    if (!valid) return;
+    if (await login(form.email, form.password))
         router.replace('/dashboard')
 }
 

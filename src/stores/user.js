@@ -32,15 +32,6 @@ export const useAuthStore = defineStore("authStore", {
           resolve(true);
         });
       });
-
-      // return new Promise((resolve, reject) => {
-      //   authStateChanged(async (user) => {
-      //     console.log('pinia init');
-      //     this.user = user ? user : null;
-      //     // if (user) this.token = await getIdTokenResult(user);
-      //     resolve();
-      //   }, reject());
-      // });
     },
     async loginGooglePopup() {
       try {
@@ -73,6 +64,11 @@ export const useAuthStore = defineStore("authStore", {
         this.loading = false;
         return true;
       } catch (error) {
+        switch (error.code) {
+          case "auth/user-not-found":
+            alert("User not found");
+            break;
+        }
         this.user = null;
         this.error = error;
         console.log(error);
@@ -81,10 +77,14 @@ export const useAuthStore = defineStore("authStore", {
         this.loading = false;
       }
     },
-    async createAccount(email, password) {
+    async createAccount(email, password, displayName) {
       try {
         this.loading = true;
         const response = await createAccountEmailPassword(email, password);
+        response.user.displayName = displayName;
+        // console.log('response', response);
+        await createUserAuth(response.user);
+
         this.user = response.user ? response.user : null;
         this.error = null;
         this.loading = false;

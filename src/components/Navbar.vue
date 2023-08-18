@@ -2,9 +2,9 @@
     <nav class="navbar is-warning is-fixed-top" role="navigation" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
-                <RouterLink class="navbar-item" to="/" exact>
+                <div class="navbar-item">
                     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="28" height="28" />
-                </RouterLink>
+                </div>
 
                 <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
                     data-target="navbarBasicExample">

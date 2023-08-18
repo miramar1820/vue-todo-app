@@ -21,69 +21,55 @@
                         <div class="field">
                             <label for="" class="label">Full Name</label>
                             <div class="control has-icons-left">
-                                <input type="text" v-model="v$.fullName.$model"
-                                    placeholder="e.g. John Doe" class="input">
+                                <input type="text" v-model="state.fullName" placeholder="e.g. John Doe" class="input"
+                                    :class="{ 'is-danger': v$.fullName.$error }" @blur="v$.fullName.$touch()">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-user"></i>
                                 </span>
                             </div>
-                            <div v-for="(error, index) in v$.fullName.$errors"
+                            <!-- <div v-for="(error, index) in v$.fullName.$errors"
                                 :key="index">
                                 {{ error.$message }}
-                            </div>
+                            </div> -->
                         </div>
                         <div class="field">
                             <label for="" class="label">Email</label>
                             <div class="control has-icons-left">
-                                <input type="text" v-model="v$.email.$model"
-                                    placeholder="e.g. bobsmith@gmail.com"
-                                    class="input">
+                                <input type="text" v-model="state.email" placeholder="e.g. bobsmith@gmail.com" class="input"
+                                    :class="{ 'is-danger': v$.email.$error }" @blur="v$.email.$touch()">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-envelope"></i>
                                 </span>
-                            </div>
-                            <div v-for="(error, index) in v$.email.$errors"
-                                :key="index">
-                                {{ error.$message }}
                             </div>
                         </div>
                         <div class="field">
                             <label for="" class="label">Password</label>
                             <div class="control has-icons-left">
-                                <input type="password"
-                                    v-model="state.password.password"
-                                    placeholder="*******" class="input">
+                                <input type="text" v-model="state.password" placeholder="*******" class="input"
+                                    :class="{ 'is-danger': v$.password.$error }" @blur="v$.password.$touch()">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-lock"></i>
                                 </span>
-                            </div>
-                            <div v-for="(error, index) in v$.password.password.$errors"
-                                :key="index">
-                                {{ error.$message }}
                             </div>
                         </div>
                         <div class="field">
                             <label for="" class="label">Confirm Password</label>
                             <div class="control has-icons-left">
-                                <input type="password"
-                                    v-model="state.password.confirm"
-                                    placeholder="*******" class="input">
+                                <input type="text" v-model="state.confirm" placeholder="*******" class="input"
+                                    :class="{ 'is-danger': v$.confirm.$error }" @blur="v$.confirm.$touch()">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-lock"></i>
                                 </span>
                             </div>
-                            <div v-for="(error, index) in v$.password.confirm.$errors"
-                                :key="index">
+                            <div v-for="(error, index) in v$.confirm.$errors" :key="index">
                                 {{ error.$message }}
                             </div>
                         </div>
                         <div class="error">
-                            <span class="is-danger"> {{ store.error ?
-                                store.error : '' }}</span>
+                            <span class="is-danger" v-if="store.error"> {{ store.error }}</span>
                         </div>
                         <div class="field mt-5">
-                            <button class="button is-success is-fullwidth"
-                                :class="store.loading ? 'is-loading' : ''">
+                            <button class="button is-success is-fullwidth" :class="{ 'is-loading': store.loading }">
                                 <span class="icon">
                                     <i class="fa fa-user-plus"></i>
                                 </span>
@@ -105,7 +91,7 @@
 </template>
 
 <script setup>
-import { ref, watch, reactive, computed } from 'vue'
+import { reactive, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import { useRouter } from 'vue-router'
@@ -118,23 +104,24 @@ const router = useRouter();
 const state = reactive({
     fullName: '',
     email: '',
-    password: {
-        password: '',
-        confirm: '',
-    },
+    password: '',
+    confirm: '',
 })
 
 const rules = {
     fullName: { required },
     email: { required, email },
-    password: {
-        password: { required, minLength: minLength(6) },
-        confirm: { required, sameAs: sameAs(state.password.password) },
-    },
+    password: { required, minLength: minLength(6) },
+    confirm: { required, sameAs: sameAs(computed(() => state.password)) },
 }
 
 const v$ = useVuelidate(rules, state)
-console.log(v$);
+// console.log(v$);
+
+// watch(state, (val) => {
+
+//     console.log(val);
+// })
 
 const validation = reactive(
     [
@@ -165,21 +152,15 @@ const validation = reactive(
     ]
 )
 
-let pass = validation.filter(ob => ob.label === 'Password')
-console.log("pass", pass);
 
-validation.forEach((field) => {
-    field.valid = false;
-    // field.activated = false;
-})
 
 const registerUser = async () => {
-    v$.value.$validate();
-    if (v$.value.$error) {
-        alert("Have errors!!!");
-    }
-    // if (await store.createAccount(email.value, password.value))
-    //     router.replace('/login')
+    // const inv = v$.value.$invalid;
+    const valid = await v$.value.$validate();
+    // console.log(valid);
+    if (!valid) return;
+    if (await store.createAccount(state.email, state.password, state.fullName))
+        router.replace('/login')
 }
 
 
