@@ -101,6 +101,10 @@ import Input from '@/components/UI/Input.vue';
 const store = useAuthStore();
 const router = useRouter();
 
+store.reset();
+
+console.log('register');
+
 const state = reactive({
     fullName: '',
     email: '',

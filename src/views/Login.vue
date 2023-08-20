@@ -6,14 +6,15 @@
                 <div class="column is-5-tablet is-4-desktop is-3-widescreen">
 
 
-                    <form @submit.prevent class="box">
+                    <div class="box">
                         <div class="block">
                             <h1 class="title is-4 has-text-centered">Login</h1>
                         </div>
 
                         <div class="mb-3">
-                            <button class="button is-outlined is-fullwidth" @click.prevent="googleLoginRedirect"
-                                :disabled="store.loading ? true : false">
+                            <button class="button is-outlined is-fullwidth"
+                                @click="googleLoginRedirect"
+                                :disabled="store.loading">
                                 <span class="icon">
                                     <i class="fa fa-google"></i>
                                 </span>
@@ -23,53 +24,68 @@
                         <div class="mb-3 has-text-centered">
                             <span>or</span>
                         </div>
-
-                        <div class="field">
-                            <label for="" class="label">Email</label>
-                            <div class="control has-icons-left">
-                                <input type="email" v-model="form.email" placeholder="e.g. bobsmith@gmail.com"
-                                    class="input" :class="emailClass">
-                                <span class="icon is-small is-left">
-                                    <i class="fa fa-envelope"></i>
-                                </span>
+                        <form @submit.prevent="loginUser">
+                            <div class="field">
+                                <label for="" class="label">Email</label>
+                                <div class="control has-icons-left">
+                                    <input type="text" v-model="form.email"
+                                        placeholder="e.g. bobsmith@gmail.com"
+                                        class="input" :class="emailClass"
+                                        @blur="v$.email.$touch">
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="field">
-                            <label for="" class="label">Password</label>
-                            <div class="control has-icons-left">
-                                <input type="password" v-model="form.password" placeholder="*******" class="input">
-                                <span class="icon is-small is-left">
-                                    <i class="fa fa-lock"></i>
-                                </span>
+                            <div class="field">
+                                <label for="" class="label">Password</label>
+                                <div class="control has-icons-left">
+                                    <input type="password" v-model="form.password"
+                                        placeholder="*******" class="input"
+                                        :class="passwordClass"
+                                        @blur="v$.password.$touch">
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="error">
-                            <span class="is-danger" v-if="store.error"> {{ store.error }}</span>
-                        </div>
-                        <!-- <progress v-if="store.loading" class="progress is-small is-primary" max="100">15%</progress> -->
-                        <!-- <span>{{ store.loading }}</span> -->
-                        <!-- <div class="field">
+                            <div v-if="store.error" class="has-text-centered">
+                                <span class="has-text-danger"> {{
+                                    store.error }}</span>
+                            </div>
+                            <div v-if="v$.$error"
+                                class="notification is-danger is-light">
+                                Please fill form correctly.
+                            </div>
+                            <!-- <progress v-if="store.loading" class="progress is-small is-primary" max="100">15%</progress> -->
+                            <!-- <span>{{ store.loading }}</span> -->
+                            <!-- <div class="field">
                                 <label for="" class="checkbox">
                                     <input type="checkbox">
                                     Remember me
                                 </label>
                             </div> -->
-                        <div class="field mt-5">
-                            <button class="button is-success is-fullwidth" :class="store.loading ? 'is-loading' : ''"
-                                @click="loginUser">
-                                <span class="icon">
-                                    <i class="fa fa-sign-in"></i>
-                                </span>
-                                <span>Login</span>
-                            </button>
-                        </div>
-                        <div class="field has-text-centered">
-                            <div class="is-size-7">
-                                Don't have an account?
-                                <RouterLink to="/register" class="link"> Register </RouterLink>
+                            <div class="field mt-5">
+                                <button class="button is-success is-fullwidth"
+                                    :class="{ 'is-loading': store.loading }">
+                                    <span class="icon">
+                                        <i class="fa fa-sign-in"></i>
+                                    </span>
+                                    <span>Login</span>
+                                </button>
                             </div>
-                        </div>
-                    </form>
+
+
+                            <div class="field has-text-centered">
+                                <div class="is-size-7">
+                                    Don't have an account?
+                                    <RouterLink to="/register" class="link">
+                                        Register
+                                    </RouterLink>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,15 +97,14 @@ import { computed, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/user'
 import { useVuelidate } from '@vuelidate/core'
-import { required, email as emailValidator, minLength, sameAs } from '@vuelidate/validators'
+import { required, email as emailValidator, minLength } from '@vuelidate/validators'
 
 
 const store = useAuthStore();
 const router = useRouter();
-const { login, loginGoogleRedirect } = store;
+const { login, loginGoogleRedirect, reset } = store;
 
-// const email = ref('')
-// const password = ref('')
+reset();
 
 const form = reactive({
     email: '',
@@ -107,8 +122,13 @@ const v$ = useVuelidate(rules, form)
 
 
 const emailClass = computed(() => ({
-    'is-danger': v$.email.$error
+    'is-danger': v$.value.email.$error
 }))
+const passwordClass = computed(() => ({
+    'is-danger': v$.value.password.$error
+}))
+
+// console.log(v$.value.email);
 
 const loginUser = async () => {
     const valid = await v$.value.$validate();

@@ -66,11 +66,17 @@ export const useAuthStore = defineStore("authStore", {
       } catch (error) {
         switch (error.code) {
           case "auth/user-not-found":
-            alert("User not found");
+            this.error = "User not found.";
             break;
+          case "auth/wrong-password":
+            this.error = "Wrong password.";
+            break;
+
+          default: {
+            this.error = error;
+          }
         }
         this.user = null;
-        this.error = error;
         console.log(error);
         return false;
       } finally {
@@ -110,5 +116,8 @@ export const useAuthStore = defineStore("authStore", {
         console.log(error);
       }
     },
+    reset() {
+      this.error = null;
+    }
   },
 });
