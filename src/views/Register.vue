@@ -21,8 +21,8 @@
                         <div class="field">
                             <label for="" class="label">Full Name</label>
                             <div class="control has-icons-left">
-                                <input type="text" v-model="state.fullName" placeholder="e.g. John Doe" class="input"
-                                    :class="{ 'is-danger': v$.fullName.$error }" @blur="v$.fullName.$touch()">
+                                <input type="text" v-model="state.fullName" placeholder="e.g. Bob Smith" class="input"
+                                    :class="{ 'is-danger': v$.fullName.$error }" @blur="v$.fullName.$touch">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-user"></i>
                                 </span>
@@ -36,7 +36,7 @@
                             <label for="" class="label">Email</label>
                             <div class="control has-icons-left">
                                 <input type="text" v-model="state.email" placeholder="e.g. bobsmith@gmail.com" class="input"
-                                    :class="{ 'is-danger': v$.email.$error }" @blur="v$.email.$touch()">
+                                    :class="{ 'is-danger': v$.email.$error }" @blur="v$.email.$touch">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-envelope"></i>
                                 </span>
@@ -45,8 +45,8 @@
                         <div class="field">
                             <label for="" class="label">Password</label>
                             <div class="control has-icons-left">
-                                <input type="text" v-model="state.password" placeholder="*******" class="input"
-                                    :class="{ 'is-danger': v$.password.$error }" @blur="v$.password.$touch()">
+                                <input type="password" v-model="state.password" placeholder="*******" class="input"
+                                    :class="{ 'is-danger': v$.password.$error }" @blur="v$.password.$touch">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-lock"></i>
                                 </span>
@@ -55,15 +55,15 @@
                         <div class="field">
                             <label for="" class="label">Confirm Password</label>
                             <div class="control has-icons-left">
-                                <input type="text" v-model="state.confirm" placeholder="*******" class="input"
-                                    :class="{ 'is-danger': v$.confirm.$error }" @blur="v$.confirm.$touch()">
+                                <input type="password" v-model="state.confirm" placeholder="*******" class="input"
+                                    :class="{ 'is-danger': v$.confirm.$error }" @blur="v$.confirm.$touch">
                                 <span class="icon is-small is-left">
                                     <i class="fa fa-lock"></i>
                                 </span>
                             </div>
-                            <div v-for="(error, index) in v$.confirm.$errors" :key="index">
+                            <!-- <div v-for="(error, index) in v$.confirm.$errors" :key="index">
                                 {{ error.$message }}
-                            </div>
+                            </div> -->
                         </div>
                         <div class="error">
                             <span class="is-danger" v-if="store.error"> {{ store.error }}</span>
@@ -127,36 +127,6 @@ const v$ = useVuelidate(rules, state)
 //     console.log(val);
 // })
 
-const validation = reactive(
-    [
-        {
-            label: "Fullname",
-            value: "",
-            pattern: /^[a-zA-Z ]{2,30}$/,
-            iconClass: 'fa fa-user'
-        },
-        {
-            label: "Email",
-            value: "",
-            pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-            iconClass: 'fa fa-envelope'
-        },
-        {
-            label: "Password",
-            value: "",
-            pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-            iconClass: 'fa fa-lock'
-        },
-        {
-            label: "Confirm",
-            value: "",
-            pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-            iconClass: 'fa fa-lock'
-        },
-    ]
-)
-
-
 
 const registerUser = async () => {
     // const inv = v$.value.$invalid;
@@ -177,13 +147,5 @@ const registerUser = async () => {
 //     email.value = val;
 //     validateEmail(val)
 // })
-
-const validate = (i, val) => {
-    let field = validation[i];
-    field.value = val.trim();
-    // field.activated = true;
-    field.valid = field.pattern.test(field.value);
-}
-
 
 </script>
