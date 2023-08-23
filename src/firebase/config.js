@@ -93,4 +93,6 @@ export const createUserAuth = async (userAuth, additinalInfo = {}) => {
   return userDocRef;
 };
 
-export { app, db, auth };
+
+
+// export { app, db, auth };

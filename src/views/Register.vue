@@ -19,7 +19,7 @@
                         </template> -->
 
                         <div class="field">
-                            <label for="" class="label">Full Name</label>
+                            <label class="label">Full Name</label>
                             <div class="control has-icons-left">
                                 <input type="text" v-model="state.fullName" placeholder="e.g. Bob Smith" class="input"
                                     :class="{ 'is-danger': v$.fullName.$error }" @blur="v$.fullName.$touch">
@@ -33,7 +33,7 @@
                             </div> -->
                         </div>
                         <div class="field">
-                            <label for="" class="label">Email</label>
+                            <label class="label">Email</label>
                             <div class="control has-icons-left">
                                 <input type="text" v-model="state.email" placeholder="e.g. bobsmith@gmail.com" class="input"
                                     :class="{ 'is-danger': v$.email.$error }" @blur="v$.email.$touch">
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="field">
-                            <label for="" class="label">Password</label>
+                            <label class="label">Password</label>
                             <div class="control has-icons-left">
                                 <input type="password" v-model="state.password" placeholder="*******" class="input"
                                     :class="{ 'is-danger': v$.password.$error }" @blur="v$.password.$touch">
@@ -53,7 +53,7 @@
                             </div>
                         </div>
                         <div class="field">
-                            <label for="" class="label">Confirm Password</label>
+                            <label class="label">Confirm Password</label>
                             <div class="control has-icons-left">
                                 <input type="password" v-model="state.confirm" placeholder="*******" class="input"
                                     :class="{ 'is-danger': v$.confirm.$error }" @blur="v$.confirm.$touch">

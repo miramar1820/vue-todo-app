@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import {
-  auth,
   authStateChanged,
   createAccountEmailPassword,
   loginAccountEmailPassword,

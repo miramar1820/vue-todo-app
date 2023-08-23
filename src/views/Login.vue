@@ -2,15 +2,11 @@
     <div class="is-flex fullheight is-align-items-center">
         <div class="container">
             <div class="columns is-centered">
-
                 <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-
-
                     <div class="box">
                         <div class="block">
                             <h1 class="title is-4 has-text-centered">Login</h1>
                         </div>
-
                         <div class="mb-3">
                             <button class="button is-outlined is-fullwidth"
                                 @click="googleLoginRedirect"
@@ -26,7 +22,7 @@
                         </div>
                         <form @submit.prevent="loginUser">
                             <div class="field">
-                                <label for="" class="label">Email</label>
+                                <label class="label">Email</label>
                                 <div class="control has-icons-left">
                                     <input type="text" v-model="form.email"
                                         placeholder="e.g. bobsmith@gmail.com"
@@ -38,7 +34,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <label for="" class="label">Password</label>
+                                <label class="label">Password</label>
                                 <div class="control has-icons-left">
                                     <input type="password" v-model="form.password"
                                         placeholder="*******" class="input"
@@ -55,12 +51,12 @@
                             </div>
                             <div v-if="v$.$error"
                                 class="notification is-danger is-light">
-                                Please fill form correctly.
+                                Please fill form.
                             </div>
                             <!-- <progress v-if="store.loading" class="progress is-small is-primary" max="100">15%</progress> -->
                             <!-- <span>{{ store.loading }}</span> -->
                             <!-- <div class="field">
-                                <label for="" class="checkbox">
+                                <label class="checkbox">
                                     <input type="checkbox">
                                     Remember me
                                 </label>
@@ -74,8 +70,6 @@
                                     <span>Login</span>
                                 </button>
                             </div>
-
-
                             <div class="field has-text-centered">
                                 <div class="is-size-7">
                                     Don't have an account?
