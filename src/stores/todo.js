@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import {
-  authStateChanged,
-} from "../firebase/config";
+import { useAuthStore } from "./user";
+
+import { authStateChanged } from "../firebase/config";
 
 export const useTodosStore = defineStore("todosStore", {
   state: () => ({
@@ -25,6 +25,5 @@ export const useTodosStore = defineStore("todosStore", {
         });
       });
     },
-    
   },
 });

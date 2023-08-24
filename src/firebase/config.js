@@ -20,6 +20,7 @@ import {
   writeBatch,
   query,
   getDocs,
+  addDoc
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -86,6 +87,8 @@ export const createUserAuth = async (userAuth, additinalInfo = {}) => {
         createdAt,
         ...additinalInfo,
       });
+      const todoRef = collection(db, `users/${userAuth.uid}/test`);
+      await addDoc(todoRef, {});
     } catch (error) {
       console.log("Error has occured when created user", error.message);
     }
@@ -95,4 +98,8 @@ export const createUserAuth = async (userAuth, additinalInfo = {}) => {
 
 
 
+export const createTodo = async () => {
+  const user = auth.currentUser;
+  console.log(user);
+}
 // export { app, db, auth };

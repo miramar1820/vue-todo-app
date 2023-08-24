@@ -24,10 +24,11 @@ export const useAuthStore = defineStore("authStore", {
     init() {
       return new Promise((resolve) => {
         authStateChanged(async (user) => {
+          console.log("authstatechanged");
           this.user = user ? user : null;
-          if (user) {
-            await createUserAuth(user);
-          }
+          // if (user) {
+          //   await createUserAuth(user);
+          // }
           resolve(true);
         });
       });
@@ -90,7 +91,7 @@ export const useAuthStore = defineStore("authStore", {
         // console.log('response', response);
         await createUserAuth(response.user);
 
-        this.user = response.user ? response.user : null;
+        // this.user = response.user ? response.user : null;
         this.error = null;
         this.loading = false;
         return true;
@@ -99,6 +100,8 @@ export const useAuthStore = defineStore("authStore", {
         this.error = error;
         console.log(error);
         return false;
+      } finally {
+        this.loading = false;
       }
     },
     async logoutAccount() {
@@ -117,6 +120,6 @@ export const useAuthStore = defineStore("authStore", {
     },
     reset() {
       this.error = null;
-    }
+    },
   },
 });

@@ -133,8 +133,9 @@ const registerUser = async () => {
     const valid = await v$.value.$validate();
     // console.log(valid);
     if (!valid) return;
-    if (await store.createAccount(state.email, state.password, state.fullName))
+    if (await store.createAccount(state.email, state.password, state.fullName)) {
         router.replace('/login')
+    }
 }
 
 
