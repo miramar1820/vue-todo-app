@@ -20,7 +20,7 @@ import {
   writeBatch,
   query,
   getDocs,
-  addDoc
+  addDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -88,7 +88,7 @@ export const createUserAuth = async (userAuth, additinalInfo = {}) => {
         ...additinalInfo,
       });
       const todoRef = collection(db, `users/${userAuth.uid}/test`);
-      await addDoc(todoRef, {});
+      // await addDoc(todoRef, {});
     } catch (error) {
       console.log("Error has occured when created user", error.message);
     }
@@ -96,10 +96,44 @@ export const createUserAuth = async (userAuth, additinalInfo = {}) => {
   return userDocRef;
 };
 
-
-
-export const createTodo = async () => {
+export const createTodo = async (todo = {}) => {
   const user = auth.currentUser;
-  console.log(user);
-}
+  if (user) {
+    try {
+      const todoRef = collection(db, `users/${user.uid}/todos`);
+      const todoresult = await addDoc(todoRef, { todo });
+      return true;
+    } catch (error) {
+      console.log("Error has occured when created todo", error.message);
+      return false;
+    }
+  }
+  // console.log("🚀 ~ file: config.js:101 ~ createTodo ~ user:", user)
+  // console.log("🚀 ~ file: config.js:103 ~ createTodo ~ todoresult:", todoresult)
+};
+
+export const fetchAllTodosForUser = async () => {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const todosRef = collection(db, `users/${user.uid}/todos`);
+      const q = query(todosRef);
+      const querySnap = await getDocs(q);
+      let todoArray = [];
+      console.log(
+        "🚀 ~ file: config.js:122 ~ fetchAllTodosForUser ~ querySnap:",
+        querySnap.docs
+      );
+      querySnap.docs.forEach((item) => {
+        // console.log(item.data());
+        todoArray.push(item.data().todo);
+      });
+      console.log(todoArray);
+      return todoArray;
+    } catch (error) {
+      console.log("Error has occured when created todo", error.message);
+      return null;
+    }
+  }
+};
 // export { app, db, auth };

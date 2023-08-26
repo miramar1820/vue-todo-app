@@ -46,7 +46,9 @@ export const useAuthStore = defineStore("authStore", {
     },
     async loginGoogleRedirect() {
       try {
-        await loginWithGoogleRedirect();
+        const resp = await loginWithGoogleRedirect();
+        console.log("🚀 ~ file: user.js:50 ~ loginGoogleRedirect ~ resp:", resp)
+        // await createUserAuth()
         return true;
       } catch (error) {
         this.user = null;

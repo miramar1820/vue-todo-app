@@ -1,13 +1,14 @@
 import { defineStore } from "pinia";
 import { useAuthStore } from "./user";
 
-import { authStateChanged } from "../firebase/config";
+import { createTodo, fetchAllTodosForUser } from "../firebase/config";
 
 export const useTodosStore = defineStore("todosStore", {
   state: () => ({
     todos: [],
     error: null,
     loading: false,
+    userLoggedIn: useAuthStore().isLoggedIn,
   }),
   getters: {
     todosError: (state) => state.error,
@@ -15,15 +16,22 @@ export const useTodosStore = defineStore("todosStore", {
   },
   actions: {
     init() {
-      return new Promise((resolve) => {
-        authStateChanged(async (user) => {
-          this.user = user ? user : null;
-          if (user) {
-            await createUserAuth(user);
-          }
-          resolve(true);
-        });
-      });
+      const user = this.userStore;
+      console.log(user);
+    },
+
+    async fetchTodos() {
+      console.log('fetchTodos exposed');
+      this.todos = await fetchAllTodosForUser();
+    },
+    async addTodo(todo) {
+      if (this.userLoggedIn) {
+        try {
+          await createTodo(todo);
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
     },
   },
 });
