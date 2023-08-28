@@ -105,7 +105,10 @@
                                 </a>
                                 <hr class="navbar-divider">
                                 <a class="navbar-item">
-                                    Profile
+                                    <span class="icon">
+                                        <i class="fa fa-cog"></i>
+                                    </span>
+                                    <span>Settings</span>
                                 </a>
                                 <hr class="navbar-divider">
                                 <a class="navbar-item" @click="logout">

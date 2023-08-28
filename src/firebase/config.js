@@ -21,6 +21,7 @@ import {
   query,
   getDocs,
   addDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -97,11 +98,16 @@ export const createUserAuth = async (userAuth, additinalInfo = {}) => {
 };
 
 export const createTodo = async (todo = {}) => {
+  console.log("🚀 ~ file: config.js:101 ~ createTodo ~ todo:", todo)
+  
   const user = auth.currentUser;
   if (user) {
     try {
       const todoRef = collection(db, `users/${user.uid}/todos`);
-      const todoresult = await addDoc(todoRef, { todo });
+      const todoresult = await addDoc(todoRef, {
+        todo,
+        timestamp: serverTimestamp(),
+      });
       return true;
     } catch (error) {
       console.log("Error has occured when created todo", error.message);
