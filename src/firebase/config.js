@@ -18,6 +18,7 @@ import {
   setDoc,
   collection,
   writeBatch,
+  orderBy,
   query,
   getDocs,
   addDoc,
@@ -88,7 +89,7 @@ export const createUserAuth = async (userAuth, additinalInfo = {}) => {
         createdAt,
         ...additinalInfo,
       });
-      const todoRef = collection(db, `users/${userAuth.uid}/test`);
+      const todoRef = collection(db, `users/${userAuth.uid}/todos`);
       // await addDoc(todoRef, {});
     } catch (error) {
       console.log("Error has occured when created user", error.message);
@@ -98,14 +99,14 @@ export const createUserAuth = async (userAuth, additinalInfo = {}) => {
 };
 
 export const createTodo = async (todo = {}) => {
-  console.log("🚀 ~ file: config.js:101 ~ createTodo ~ todo:", todo)
-  
+  console.log("🚀 ~ file: config.js:101 ~ createTodo ~ todo:", todo);
+
   const user = auth.currentUser;
   if (user) {
     try {
       const todoRef = collection(db, `users/${user.uid}/todos`);
       const todoresult = await addDoc(todoRef, {
-        todo,
+        ...todo,
         timestamp: serverTimestamp(),
       });
       return true;
@@ -123,18 +124,18 @@ export const fetchAllTodosForUser = async () => {
   if (user) {
     try {
       const todosRef = collection(db, `users/${user.uid}/todos`);
-      const q = query(todosRef);
+      const q = query(todosRef, orderBy('timestamp', 'desc'));
       const querySnap = await getDocs(q);
       let todoArray = [];
-      console.log(
-        "🚀 ~ file: config.js:122 ~ fetchAllTodosForUser ~ querySnap:",
-        querySnap.docs
-      );
+      // console.log(
+      //   "🚀 ~ file: config.js:122 ~ fetchAllTodosForUser ~ querySnap:",
+      //   querySnap.docs
+      // );
       querySnap.docs.forEach((item) => {
         // console.log(item.data());
-        todoArray.push(item.data().todo);
+        todoArray.push(item.data());
       });
-      console.log(todoArray);
+      // console.log(todoArray);
       return todoArray;
     } catch (error) {
       console.log("Error has occured when created todo", error.message);

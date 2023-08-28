@@ -7,10 +7,12 @@ export const useTodosStore = defineStore("todosStore", {
   state: () => ({
     todos: [],
     error: null,
-    loading: false,
+    loadingTodos: false,
+
     userLoggedIn: useAuthStore().isLoggedIn,
   }),
   getters: {
+    todosEmpty: (state) => state.todos.length === 0,
     todosError: (state) => state.error,
     isLoading: (state) => state.loading,
   },
@@ -21,17 +23,30 @@ export const useTodosStore = defineStore("todosStore", {
     },
 
     async fetchTodos() {
-      console.log('fetchTodos exposed');
-      this.todos = await fetchAllTodosForUser();
+      this.loadingTodos = true;
+      console.log("fetchTodos exposed");
+      try {
+        this.todos = await fetchAllTodosForUser();
+        this.loadingTodos = false;
+      } catch (error) {
+        console.log(error.message);
+      } finally {
+        this.loadingTodos = false;
+      }
     },
     async addTodo(todo) {
       if (this.userLoggedIn) {
         try {
           await createTodo(todo);
+          return true;
         } catch (error) {
           console.log(error.message);
+          return false;
         }
       }
     },
+    async removeTodo(id) {
+      
+    }
   },
 });
