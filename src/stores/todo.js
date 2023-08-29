@@ -1,7 +1,12 @@
 import { defineStore } from "pinia";
 import { useAuthStore } from "./user";
 
-import { createTodo, fetchAllTodosForUser } from "../firebase/config";
+import {
+  createTodo,
+  fetchAllTodosForUser,
+  removeDoc,
+  updateTodo,
+} from "../firebase/config";
 
 export const useTodosStore = defineStore("todosStore", {
   state: () => ({
@@ -14,7 +19,7 @@ export const useTodosStore = defineStore("todosStore", {
   getters: {
     todosEmpty: (state) => state.todos.length === 0,
     todosError: (state) => state.error,
-    isLoading: (state) => state.loading,
+    isLoading: (state) => state.loadingTodos,
   },
   actions: {
     init() {
@@ -28,6 +33,7 @@ export const useTodosStore = defineStore("todosStore", {
       try {
         this.todos = await fetchAllTodosForUser();
         this.loadingTodos = false;
+        console.log('fetchtodos', this.todos);
       } catch (error) {
         console.log(error.message);
       } finally {
@@ -38,6 +44,8 @@ export const useTodosStore = defineStore("todosStore", {
       if (this.userLoggedIn) {
         try {
           await createTodo(todo);
+          await this.fetchTodos();
+          
           return true;
         } catch (error) {
           console.log(error.message);
@@ -46,7 +54,15 @@ export const useTodosStore = defineStore("todosStore", {
       }
     },
     async removeTodo(id) {
-      
-    }
+      // console.log(id);
+      await removeDoc(id);
+      await this.fetchTodos();
+      return true
+    },
+    async changeTodo(id, title) {
+      // console.log(id);
+      await updateTodo(id, title);
+      await this.fetchTodos();
+    },
   },
 });

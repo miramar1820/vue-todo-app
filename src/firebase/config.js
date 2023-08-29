@@ -23,6 +23,7 @@ import {
   getDocs,
   addDoc,
   serverTimestamp,
+  deleteDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -47,6 +48,9 @@ provider.setCustomParameters({
 });
 
 // Authorization block
+
+const userA = auth.currentUser;
+console.log("🚀 ~ file: config.js:53 ~ userA:", userA);
 
 export const loginWithGooglePopup = () => signInWithPopup(auth, provider);
 export const loginWithGoogleRedirect = () => signInWithRedirect(auth, provider);
@@ -124,7 +128,7 @@ export const fetchAllTodosForUser = async () => {
   if (user) {
     try {
       const todosRef = collection(db, `users/${user.uid}/todos`);
-      const q = query(todosRef, orderBy('timestamp', 'desc'));
+      const q = query(todosRef, orderBy("timestamp", "desc"));
       const querySnap = await getDocs(q);
       let todoArray = [];
       // console.log(
@@ -133,13 +137,44 @@ export const fetchAllTodosForUser = async () => {
       // );
       querySnap.docs.forEach((item) => {
         // console.log(item.data());
-        todoArray.push(item.data());
+        todoArray.push({
+          id: item.id,
+          ...item.data(),
+        });
       });
       // console.log(todoArray);
       return todoArray;
     } catch (error) {
       console.log("Error has occured when created todo", error.message);
       return null;
+    }
+  }
+};
+
+export const removeDoc = async (id) => {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      // const todosRef = collection(db, `users/${user.uid}/todos`);
+      await deleteDoc(doc(db, `users/${user.uid}/todos`, id));
+      return true;
+    } catch (error) {
+      console.log("Error has occured when delete todo", error.message);
+      return false;
+    }
+  }
+};
+
+export const updateTodo = async (id, title) => {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const todoRef = doc(db, `users/${user.uid}/todos`, id);
+      await setDoc(todoRef, { title }, { merge: true });
+      return true;
+    } catch (error) {
+      console.log("Error has occured when update todo", error.message);
+      return false;
     }
   }
 };
