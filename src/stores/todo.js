@@ -6,6 +6,7 @@ import {
   fetchAllTodosForUser,
   removeDoc,
   updateTodo,
+  changeStatusTodo,
 } from "../firebase/config";
 
 export const useTodosStore = defineStore("todosStore", {
@@ -33,7 +34,7 @@ export const useTodosStore = defineStore("todosStore", {
       try {
         this.todos = await fetchAllTodosForUser();
         this.loadingTodos = false;
-        console.log('fetchtodos', this.todos);
+        console.log("fetchtodos", this.todos);
       } catch (error) {
         console.log(error.message);
       } finally {
@@ -45,7 +46,7 @@ export const useTodosStore = defineStore("todosStore", {
         try {
           await createTodo(todo);
           await this.fetchTodos();
-          
+
           return true;
         } catch (error) {
           console.log(error.message);
@@ -57,11 +58,15 @@ export const useTodosStore = defineStore("todosStore", {
       // console.log(id);
       await removeDoc(id);
       await this.fetchTodos();
-      return true
+      return true;
     },
     async changeTodo(id, title) {
       // console.log(id);
       await updateTodo(id, title);
+      await this.fetchTodos();
+    },
+    async finishTodo(id) {
+      await changeStatusTodo(id);
       await this.fetchTodos();
     },
   },

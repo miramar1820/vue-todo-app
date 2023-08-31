@@ -32,10 +32,6 @@
                     </div>
                     <progress class="progress is-info" max="100"
                         v-if="todoStore.loadingTodos">30%</progress>
-                    <!-- <template v-else> -->
-
-
-                    <!-- <template v-else> -->
                     <div class="panel-block" v-if="todoStore.todosEmpty">
                         There is no todos. Add one
                     </div>
@@ -49,46 +45,46 @@
                         v-for="todo, index in todoStore?.todos" :key="index"
                         @click="console.log(todo)">
                         <div class="is-flex is-align-items-center">
-
-                            <span class="panel-icon">
-
-                                <i class="fa fa-check" aria-hidden="true"></i>
+                            <!-- <label class="checkbox">
+                                <input type="checkbox" :checked="todo.finished">
+                                <span class="checkmark"></span>
+                            </label> -->
+                            <span class="panel-icon"
+                                :class="{ 'has-text-danger': todo.finished }"
+                                @click="completeTodo(todo.id)">
+                                <span>
+                                    <label class="check">
+                                        <input type="checkbox">
+                                        <!-- <i class="fa fa-check fa-lg" aria-hidden="true"></i> -->
+                                    </label>
+                                </span>
                             </span>
-                            <span>
+                            <span
+                                :class="{ 'has-text-grey-light is-line-through': todo.finished }">
                                 {{ todo.title }}
 
                             </span>
                         </div>
                         <div class="is-flex is-align-items-center">
-                            <span @click.stop="" class="icon has-text-info mr-3">
+                            <span @click.stop=""
+                                class="pointer icon has-text-info mr-3">
                                 <i class="fa fa-pencil"></i>
                             </span>
                             <button class="delete"
                                 @click.stop="removeTodo(todo.id)"></button>
                         </div>
-
-
-
                     </a>
-                    <!-- </template>
-                    </template> -->
-
-
-
                 </nav>
             </div>
         </div>
-        <button @click="update">Change</button>
     </div>
 </template>
 
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/user'
 import { useTodosStore } from '@/stores/todo';
 
-const store = useAuthStore();
 const todoStore = useTodosStore();
 const router = useRouter();
 const fetching = ref(false)
@@ -98,24 +94,13 @@ const defaultTodo = {
     finished: false
 }
 
-const copyTodo = ref({})
-
 const newTodo = reactive(defaultTodo)
-
-function resetForm() {
-    Object.assign(newTodo, defaultTodo);
-}
 
 onMounted(() => {
     todoStore.fetchTodos();
     console.log("onmounted");
 })
 
-// console.log(todoStore.todos);
-
-console.log(newTodo);
-
-// todoStore.init();
 const addTodo = async () => {
     if (newTodo.title === '') return;
     fetching.value = true;
@@ -129,17 +114,24 @@ const addTodo = async () => {
 const removeTodo = async (id) => {
     await todoStore.removeTodo(id)
     console.log(id);
-    // await todoStore.fetchTodos();
-
 }
 
-const update = async () => {
-    await todoStore.changeTodo('Lt8mlfyTGky5vUI2EQFc', 'New, changed title')
+const completeTodo = async (id) => {
+    await todoStore.finishTodo(id)
+    console.log(id);
 }
+
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+
+.check {
+    input[type=checkbox] {
+        visibility: hidden;
+    }
+    background-color: #333;
+}
 .fullwidth {
     width: 100%;
 }
@@ -147,10 +139,49 @@ const update = async () => {
 .progress {
     height: 3px;
 }
+
 .no-pointer {
     cursor: auto;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
+.is-line-through {
+    text-decoration: line-through;
+}
+
+.checkbox {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+}
 
 
 .round {
