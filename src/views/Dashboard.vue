@@ -78,7 +78,6 @@
                 </nav>
             </div>
         </div>
-        <button @click="update">Change</button>
     </div>
 </template>
 
