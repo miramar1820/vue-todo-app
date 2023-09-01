@@ -3,25 +3,22 @@
 
 
         <div class="columns is-mobile is-centered">
-            <div class="column is-half">
+            <div class="column">
                 <nav class="panel">
                     <p class="panel-heading">
                         Todo List
                     </p>
                     <div class="panel-block">
-                        <form @submit.prevent="addTodo"
-                            class="field is-align-content-stretch has-addons control">
+                        <form @submit.prevent="addTodo" class="field is-align-content-stretch has-addons control">
                             <div class="control has-icons-left fullwidth">
-                                <input v-model="newTodo.title" type="text"
-                                    class="input is-info " placeholder="Input task">
+                                <input v-model="newTodo.title" type="text" class="input is-info " placeholder="Input task">
                                 <span class="icon is-left">
                                     <i class="fa fa-pencil"></i>
                                 </span>
                             </div>
                             <div class="control">
 
-                                <button type="submit" class="button is-info"
-                                    :class="{ 'is-loading': fetching }">
+                                <button type="submit" class="button is-info" :class="{ 'is-loading': fetching }">
                                     <span class="icon">
                                         <i class="fa fa-plus"></i>
                                     </span>
@@ -30,8 +27,7 @@
                             </div>
                         </form>
                     </div>
-                    <progress class="progress is-info" max="100"
-                        v-if="todoStore.loadingTodos">30%</progress>
+                    <progress class="progress is-info" max="100" v-if="todoStore.loadingTodos">30%</progress>
                     <div class="panel-block" v-if="todoStore.todosEmpty">
                         There is no todos. Add one
                     </div>
@@ -42,36 +38,23 @@
                     </p>
 
                     <a class="no-pointer panel-block is-align-items-center is-justify-content-space-between"
-                        v-for="todo, index in todoStore?.todos" :key="index"
-                        @click="console.log(todo)">
+                        v-for="todo, index in todoStore?.todos" :key="index" @click="console.log(todo)">
                         <div class="is-flex is-align-items-center">
-                            <!-- <label class="checkbox">
-                                <input type="checkbox" :checked="todo.finished">
-                                <span class="checkmark"></span>
-                            </label> -->
-                            <span class="panel-icon"
-                                :class="{ 'has-text-danger': todo.finished }"
-                                @click="completeTodo(todo.id)">
-                                <span>
-                                    <label class="check">
-                                        <input type="checkbox">
-                                        <!-- <i class="fa fa-check fa-lg" aria-hidden="true"></i> -->
-                                    </label>
-                                </span>
-                            </span>
-                            <span
-                                :class="{ 'has-text-grey-light is-line-through': todo.finished }">
+                            <div class="round mr-3">
+                                <input type="checkbox" :checked="todo.finished" :id="todo.id"
+                                    @change="completeTodo(todo.id)" />
+                                <label :for="todo.id"></label>
+                            </div>
+                            <span :class="{ 'has-text-grey-light is-line-through': todo.finished }">
                                 {{ todo.title }}
 
                             </span>
                         </div>
                         <div class="is-flex is-align-items-center">
-                            <span @click.stop=""
-                                class="pointer icon has-text-info mr-3">
+                            <span @click.stop="" class="pointer icon has-text-info mr-3">
                                 <i class="fa fa-pencil"></i>
                             </span>
-                            <button class="delete"
-                                @click.stop="removeTodo(todo.id)"></button>
+                            <button class="delete" @click.stop="removeTodo(todo.id)"></button>
                         </div>
                     </a>
                 </nav>
@@ -125,65 +108,6 @@ const completeTodo = async (id) => {
 </script>
 
 <style lang="scss">
-
-.check {
-    input[type=checkbox] {
-        visibility: hidden;
-    }
-    background-color: #333;
-}
-.fullwidth {
-    width: 100%;
-}
-
-.progress {
-    height: 3px;
-}
-
-.no-pointer {
-    cursor: auto;
-}
-
-.pointer {
-    cursor: pointer;
-}
-
-.is-line-through {
-    text-decoration: line-through;
-}
-
-.checkbox {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-
-    input {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-        height: 0;
-        width: 0;
-    }
-}
-
-/* Create a custom checkbox */
-.checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
-}
-
-
 .round {
     position: relative;
 }
@@ -193,11 +117,11 @@ const completeTodo = async (id) => {
     border: 1px solid #ccc;
     border-radius: 50%;
     cursor: pointer;
-    height: 28px;
+    height: 25px;
     left: 0;
     position: absolute;
     top: 0;
-    width: 28px;
+    width: 25px;
 }
 
 .round label:after {
@@ -206,10 +130,10 @@ const completeTodo = async (id) => {
     border-right: none;
     content: "";
     height: 6px;
-    left: 7px;
+    left: 6px;
     opacity: 0;
     position: absolute;
-    top: 8px;
+    top: 7px;
     transform: rotate(-45deg);
     width: 12px;
 }
@@ -225,5 +149,25 @@ const completeTodo = async (id) => {
 
 .round input[type="checkbox"]:checked+label:after {
     opacity: 1;
+}
+
+.fullwidth {
+    width: 100%;
+}
+
+.progress {
+    height: 3px;
+}
+
+.no-pointer {
+    cursor: auto !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.is-line-through {
+    text-decoration: line-through;
 }
 </style>
