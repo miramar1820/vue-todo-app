@@ -178,4 +178,22 @@ export const updateTodo = async (id, title) => {
     }
   }
 };
+
+export const changeStatusTodo = async (id) => {
+  const user = auth.currentUser;
+  try {
+    const todoRef = doc(db, `users/${user.uid}/todos`, id);
+    const value = await getDoc(todoRef);
+    const { finished } = value.data();
+    console.log("finished need", finished);
+    await setDoc(todoRef, { finished: !finished }, { merge: true });
+    return true;
+  } catch (error) {
+    console.log(
+      "Error has occured when change todo completion status",
+      error.message
+    );
+    return false;
+  }
+};
 // export { app, db, auth };
