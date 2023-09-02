@@ -5,7 +5,7 @@ import { useAuthStore } from "@/stores/user";
 
 const authCheck = (to, from, next) => {
   const store = useAuthStore();
-  console.log("authCheck", store.isLoggedIn);
+  // console.log("authCheck", store.isLoggedIn);
   if (store.isLoggedIn) {
     if (to.name === "login") {
       next({ name: "dashboard" });

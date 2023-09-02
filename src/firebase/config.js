@@ -145,7 +145,7 @@ export const fetchAllTodosForUser = async () => {
       // console.log(todoArray);
       return todoArray;
     } catch (error) {
-      console.log("Error has occured when created todo", error.message);
+      console.log("Error has occured when fetching todos.", error.message);
       return null;
     }
   }
