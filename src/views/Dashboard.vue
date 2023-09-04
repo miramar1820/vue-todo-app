@@ -1,24 +1,25 @@
 <template>
     <div class="section">
-
-
-        <div class="columns is-mobile is-centered">
-            <div class="column">
+        <div class="columns is-centered">
+            <div class="column is-8-tablet is-9-desktop is-8-widescreen">
                 <nav class="panel">
                     <p class="panel-heading">
                         Todo List
                     </p>
                     <div class="panel-block">
-                        <form @submit.prevent="addTodo" class="field is-align-content-stretch has-addons control">
+                        <form @submit.prevent="addTodo"
+                            class="field is-align-content-stretch has-addons control">
                             <div class="control has-icons-left fullwidth">
-                                <input v-model="newTodo.title" type="text" class="input is-info " placeholder="Input task">
+                                <input v-model="newTodo.title" type="text"
+                                    class="input is-info " placeholder="Input task">
                                 <span class="icon is-left">
                                     <i class="fa fa-pencil"></i>
                                 </span>
                             </div>
                             <div class="control">
 
-                                <button type="submit" class="button is-info" :class="{ 'is-loading': fetching }">
+                                <button type="submit" class="button is-info"
+                                    :class="{ 'is-loading': fetching }">
                                     <span class="icon">
                                         <i class="fa fa-plus"></i>
                                     </span>
@@ -27,50 +28,60 @@
                             </div>
                         </form>
                     </div>
-                    <progress class="progress is-info" max="100" v-if="todoStore.loadingTodos">30%</progress>
+                    <progress class="progress is-info" max="100"
+                        v-if="todoStore.loadingTodos">30%</progress>
                     <div class="panel-block" v-if="todoStore.todosEmpty">
                         There is no todos. Add one
                     </div>
                     <p class="panel-tabs" v-else>
-                        <a class="is-active">All</a>
-                        <a>Active</a>
-                        <a>Completed</a>
+                        <a :class="{ 'is-active': tab === currentTab }"
+                            v-for="tab, index in tabs" :key="index"
+                            @click="currentTab = tab">{{ tab }}</a>
                     </p>
 
                     <a class="no-pointer panel-block is-align-items-center is-justify-content-space-between"
-                        v-for="todo, index in todoStore?.todos" :key="index" @click="console.log(todo)">
+                        v-for="todo, index in filteredTodos" :key="index"
+                        @click="console.log(todo)">
+                        <!-- todoStore?.todos -->
                         <div class="is-flex is-align-items-center">
                             <div class="round mr-3">
-                                <input type="checkbox" :checked="todo.finished" :id="todo.id"
-                                    @change="completeTodo(todo.id)" />
+                                <input type="checkbox" :checked="todo.finished"
+                                    :id="todo.id" @change="completeTodo(todo.id)" />
                                 <label :for="todo.id"></label>
                             </div>
-                            <span :class="{ 'has-text-grey-light is-line-through': todo.finished }">
+                            <span
+                                :class="{ 'has-text-grey-light is-line-through': todo.finished }">
                                 {{ todo.title }}
 
                             </span>
                         </div>
                         <div class="is-flex is-align-items-center">
-                            <span @click.stop="" class="pointer icon has-text-info mr-3">
+                            <span @click.stop=""
+                                class="pointer icon has-text-info mr-3">
                                 <i class="fa fa-pencil"></i>
                             </span>
-                            <button class="delete" @click.stop="removeTodo(todo.id)"></button>
+                            <button class="delete"
+                                @click.stop="removeTodo(todo.id)"></button>
                         </div>
                     </a>
                 </nav>
             </div>
         </div>
+        <!-- <ul>
+            <li v-for="todo in filteredTodos" :key="todo.id">{{ todo.title }} {{
+                todo.finished }}</li>
+        </ul> -->
     </div>
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useTodosStore } from '@/stores/todo';
 
 const todoStore = useTodosStore();
-const router = useRouter();
 const fetching = ref(false)
+const currentTab = ref('All')
+const tabs = ref(['All', 'Active', 'Completed'])
 
 const defaultTodo = {
     title: '',
@@ -79,9 +90,8 @@ const defaultTodo = {
 
 const newTodo = reactive(defaultTodo)
 
-onMounted(() => {
-    todoStore.fetchTodos();
-    console.log("onmounted");
+onMounted(async () => {
+    await todoStore.fetchTodos();
 })
 
 const addTodo = async () => {
@@ -90,21 +100,34 @@ const addTodo = async () => {
     await todoStore.addTodo(newTodo);
     defaultTodo.title = '';
     fetching.value = false;
-    // await todoStore.fetchTodos();
-
 }
 
 const removeTodo = async (id) => {
     await todoStore.removeTodo(id)
-    console.log(id);
+    // console.log(id);
 }
 
 const completeTodo = async (id) => {
     await todoStore.finishTodo(id)
-    console.log(id);
+    // console.log(id);
 }
 
+const editTodo = async (id) => {
 
+}
+
+const filteredTodos = computed(
+    () => todoStore.todos.filter(item => {
+        switch (currentTab.value) {
+            case 'Active':
+                return item.finished === false
+            case 'Completed':
+                return item.finished === true
+            default:
+                return item;
+        }
+    })
+)
 </script>
 
 <style lang="scss">
