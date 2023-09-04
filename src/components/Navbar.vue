@@ -4,7 +4,7 @@
         <div class="container">
             <div class="navbar-brand">
                 <div class="navbar-item">
-                    <span class="logo-text">miramar</span>
+                    <span class="logo-text">LOGO</span>
                     <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="28" height="28" /> -->
                 </div>
 
@@ -110,7 +110,7 @@ const router = useRouter();
 
 const logout = async () => {
     if (confirm("Are you sure?"))
-        if (await logoutAccount()) {
+        if (logoutAccount()) {
             router.push('/')
         }
 }

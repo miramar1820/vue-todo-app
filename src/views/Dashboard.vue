@@ -10,8 +10,8 @@
                         <form @submit.prevent="addTodo"
                             class="field is-align-content-stretch has-addons control">
                             <div class="control has-icons-left fullwidth">
-                                <input v-model="newTodo.title" type="text"
-                                    class="input is-info " placeholder="Input task">
+                                <input v-model="newTodo.title" type="text" ref="mainInput"
+                                    class="input is-info" placeholder="Input task">
                                 <span class="icon is-left">
                                     <i class="fa fa-pencil"></i>
                                 </span>
@@ -90,8 +90,11 @@ const defaultTodo = {
 
 const newTodo = reactive(defaultTodo)
 
+const mainInput = ref(null)
+
 onMounted(async () => {
     await todoStore.fetchTodos();
+    mainInput.value.focus();
 })
 
 const addTodo = async () => {
