@@ -2,7 +2,7 @@
     <!-- <div class="is-flex fullheight is-align-items-center"> -->
     <div class="section">
         <div class="columns is-centered">
-            <div class="column is-8-tablet is-6-desktop is-5-widescreen">
+            <div class="column is-narrow fixed-width-400">
                 <div class="box">
                     <div class="block">
                         <h1 class="title is-4 has-text-centered">Login</h1>
@@ -52,14 +52,6 @@
                             class="notification is-danger is-light">
                             Please fill form.
                         </div>
-                        <!-- <progress v-if="store.loading" class="progress is-small is-primary" max="100">15%</progress> -->
-                        <!-- <span>{{ store.loading }}</span> -->
-                        <!-- <div class="field">
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    Remember me
-                                </label>
-                            </div> -->
                         <div class="field mt-5">
                             <button class="button is-success is-fullwidth"
                                 :class="{ 'is-loading': store.loading }">
@@ -135,9 +127,3 @@ const googleLoginRedirect = async () => {
 }
 
 </script>
-
-<style>
-.fullheight {
-    height: 90%;
-}
-</style>

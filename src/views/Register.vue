@@ -2,7 +2,7 @@
     <div class="section">
         <div class="columns is-centered">
 
-            <div class="column is-8-tablet is-6-desktop is-5-widescreen">
+            <div class="column is-narrow fixed-width-400">
 
 
                 <form @submit.prevent="registerUser" class="box">

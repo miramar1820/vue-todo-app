@@ -10,7 +10,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <Navbar />
-  <RouterView />
+  <div class="wrapper">
+    <Navbar />
+    <RouterView />
+  </div>
 </template>
 
