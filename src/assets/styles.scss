@@ -4,6 +4,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap");
 
 // $primary: #333333;
+// etc.
 $progress-border-radius: initial;
 @import "bulma/bulma.sass";
 @import "font-awesome/css/font-awesome.min.css";
@@ -24,4 +25,14 @@ $progress-border-radius: initial;
 }
 .fixed-width-400 {
   min-width: 400px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+html, body {
+  height: 100%;
 }
