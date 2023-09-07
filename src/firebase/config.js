@@ -196,4 +196,4 @@ export const changeStatusTodo = async (id) => {
     return false;
   }
 };
-// export { app, db, auth };
+export { app, db, auth };

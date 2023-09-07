@@ -1,25 +1,23 @@
 <template>
     <div class="section">
         <div class="columns is-centered">
-            <div class="column is-8-tablet is-9-desktop is-8-widescreen">
+            <div class="column is-8-tablet is-6-desktop is-5-widescreen">
                 <nav class="panel">
                     <p class="panel-heading">
-                        Todo List
+                        Todo List ({{ todoStore.todosLength }})
                     </p>
                     <div class="panel-block">
-                        <form @submit.prevent="addTodo"
-                            class="field is-align-content-stretch has-addons control">
+                        <form @submit.prevent="addTodo" class="field is-align-content-stretch has-addons control">
                             <div class="control has-icons-left fullwidth">
-                                <input v-model="newTodo.title" type="text" ref="mainInput"
-                                    class="input is-info" placeholder="Input task">
+                                <input v-model="newTodo.title" type="text" ref="mainInput" class="input is-info"
+                                    placeholder="Input task">
                                 <span class="icon is-left">
                                     <i class="fa fa-pencil"></i>
                                 </span>
                             </div>
                             <div class="control">
 
-                                <button type="submit" class="button is-info"
-                                    :class="{ 'is-loading': fetching }">
+                                <button type="submit" class="button is-info" :class="{ 'is-loading': fetching }">
                                     <span class="icon">
                                         <i class="fa fa-plus"></i>
                                     </span>
@@ -28,40 +26,46 @@
                             </div>
                         </form>
                     </div>
-                    <progress class="progress is-info" max="100"
-                        v-if="todoStore.loadingTodos">30%</progress>
+                    <progress class="progress is-info" max="100" v-if="todoStore.loadingTodos">30%</progress>
                     <div class="panel-block" v-if="todoStore.todosEmpty">
                         There is no todos. Add one
                     </div>
                     <p class="panel-tabs" v-else>
-                        <a :class="{ 'is-active': tab === currentTab }"
-                            v-for="tab, index in tabs" :key="index"
+                        <a :class="{ 'is-active': tab === currentTab }" v-for="tab, index in tabs" :key="index"
                             @click="currentTab = tab">{{ tab }}</a>
                     </p>
 
                     <a class="no-pointer panel-block is-align-items-center is-justify-content-space-between"
-                        v-for="todo, index in filteredTodos" :key="index"
-                        @click="console.log(todo)">
+                        v-for="todo, index in filteredTodos" :key="index" @click="console.log(todo)">
                         <!-- todoStore?.todos -->
-                        <div class="is-flex is-align-items-center">
+                        <div class="is-flex is-align-items-center fullwidth mr-5">
                             <div class="round mr-3">
-                                <input type="checkbox" :checked="todo.finished"
-                                    :id="todo.id" @change="completeTodo(todo.id)" />
+                                <input type="checkbox" :checked="todo.finished" :id="todo.id"
+                                    @change="completeTodo(todo.id)" />
                                 <label :for="todo.id"></label>
                             </div>
-                            <span
+                            <span v-if="editingTodo !== todo.id"
                                 :class="{ 'has-text-grey-light is-line-through': todo.finished }">
                                 {{ todo.title }}
 
                             </span>
+                            <div v-else class="fullwidth">
+                                <input type="text" class="input" v-model="todo.title">
+                            </div>
                         </div>
                         <div class="is-flex is-align-items-center">
-                            <span @click.stop=""
+                            <span v-if="editingTodo !== todo.id" @click.stop="openTodoEdit(todo.id)"
                                 class="pointer icon has-text-info mr-3">
                                 <i class="fa fa-pencil"></i>
                             </span>
-                            <button class="delete"
-                                @click.stop="removeTodo(todo.id)"></button>
+                            <span v-else class="pointer icon has-text-info mr-3" @click.stop="editTodo(todo.id, todo.title)">
+                                <i class="fa fa-save"></i>
+                            </span>
+
+                            <button class="delete" @click.stop="removeTodo(todo.id)"></button>
+
+
+
                         </div>
                     </a>
                 </nav>
@@ -71,6 +75,7 @@
             <li v-for="todo in filteredTodos" :key="todo.id">{{ todo.title }} {{
                 todo.finished }}</li>
         </ul> -->
+        <!-- {{ auth.currentUser }} -->
     </div>
 </template>
 
@@ -78,14 +83,21 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useTodosStore } from '@/stores/todo';
 
+// import { auth } from '@/firebase/config'
 const todoStore = useTodosStore();
 const fetching = ref(false)
 const currentTab = ref('All')
 const tabs = ref(['All', 'Active', 'Completed'])
+const editingTodo = ref(null)
 
 const defaultTodo = {
     title: '',
     finished: false
+}
+
+
+const openTodoEdit = (id) => {
+    editingTodo.value = id;
 }
 
 const newTodo = reactive(defaultTodo)
@@ -115,8 +127,9 @@ const completeTodo = async (id) => {
     // console.log(id);
 }
 
-const editTodo = async (id) => {
-
+const editTodo = async (id, newTitle) => {
+    await todoStore.changeTodo(id, newTitle)
+    editingTodo.value = null
 }
 
 const filteredTodos = computed(

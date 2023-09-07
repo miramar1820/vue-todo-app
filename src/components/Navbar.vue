@@ -21,10 +21,10 @@
 
                     <RouterLink to="/" class="navbar-item">Home</RouterLink>
                     <RouterLink to="/about" class="navbar-item">About</RouterLink>
-                    <RouterLink v-if="store.isLoggedIn" to="/dashboard"
+                    <!-- <RouterLink v-if="store.isLoggedIn" to="/dashboard"
                         class="navbar-item">
                         Dashboard
-                    </RouterLink>
+                    </RouterLink> -->
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
                             More
@@ -71,12 +71,12 @@
                                         class="fa fa-lg fa-user"></i></span>
                             </a>
                             <div class="navbar-dropdown is-boxed is-right">
-                                <a class="navbar-item">
+                                <RouterLink to="/dashboard" class="navbar-item">
                                     <span class="icon">
                                         <i class="fa fa-list-ol"></i>
                                     </span>
                                     <span>My todos</span>
-                                </a>
+                                </RouterLink>
                                 <hr class="navbar-divider">
                                 <a class="navbar-item">
                                     <span class="icon">

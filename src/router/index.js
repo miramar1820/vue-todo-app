@@ -13,10 +13,10 @@ const authCheck = (to, from, next) => {
       next();
     }
   } else {
-    if (to.name === "login") {
-      next();
-    } else {
+    if (to.name === "dashboard") {
       next({ name: "login" });
+    } else {
+      next();
     }
   }
 };
@@ -44,6 +44,12 @@ const routes = [
         name: "dashboard",
         component: () => import("../views/Dashboard.vue"),
         beforeEnter: authCheck,
+      },
+      {
+        path: "/todos",
+        name: "todos",
+        component: () => import("../views/Todos.vue"),
+        // beforeEnter: authCheck,
       },
       {
         path: "/:pathMatch(.*)*",

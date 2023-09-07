@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useAuthStore } from "./user";
+// import { useAuthStore } from "./user";
 
 import {
   createTodo,
@@ -15,10 +15,11 @@ export const useTodosStore = defineStore("todosStore", {
     error: null,
     loadingTodos: false,
 
-    userLoggedIn: useAuthStore().isLoggedIn,
+    // userLoggedIn: useAuthStore().isLoggedIn,
   }),
   getters: {
     todosEmpty: (state) => state.todos.length === 0,
+    todosLength: (state) => state.todos.filter(todo => todo.finished === false).length,
     todosError: (state) => state.error,
     isLoading: (state) => state.loadingTodos,
   },

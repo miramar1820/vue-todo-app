@@ -1,8 +1,10 @@
 <script setup>
+import { auth } from '@/firebase/config'
 </script>
 
 <template>
   <section class="hero is-medium">
+    
     <div class="bg"></div>
     <div class="bg bg2"></div>
     <div class="bg bg3"></div>
@@ -14,6 +16,7 @@
           </p>
           <p class="subtitle is-size-3-desktop">
             My name is Miras, I am frontend developer,  and this is a my project on Vue3
+            <!-- {{ auth.currentUser }} -->
           </p>
 
         </div>
