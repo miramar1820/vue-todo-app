@@ -3,7 +3,7 @@
   <section class="hero is-medium is-info">
     <div class="hero-body with-back">
       <div class="container has-text-centered">
-        <h1 class="title">This is about page</h1>
+        <h1 class="title is-1">About project</h1>
       </div>
     </div>
   </section>
@@ -14,7 +14,7 @@
           <div class="card-content">
             <div class="media">
               <div class="media-content has-text-centered">
-                <p class="title article-title">Introducing a new feature for paid subscribers</p>
+                <p class="title is-4">Introducing project</p>
                 <div class="tags has-addons level-item">
                   <span class="tag is-rounded is-info">@miramar</span>
                   <span class="tag is-rounded">{{ new Date().getFullYear() }}</span>
@@ -22,8 +22,7 @@
               </div>
             </div>
             <div class="content article-body">
-              <p>Non arcu risus quis varius quam quisque. Dictum varius duis at consectetur lorem. Posuere sollicitudin
-                aliquam ultrices sagittis orci a scelerisque purus semper. </p>
+              <p class="subtitle">A project for portfolio on Vue using Firebase as backend (authorization, database etc.), state management Pinia</p>
               <p>Metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. In hac habitasse platea
                 dictumst vestibulum rhoncus est pellentesque elit. Accumsan lacus vel facilisis volutpat. Non sodales
                 neque sodales ut etiam.
