@@ -22,18 +22,23 @@
               </div>
             </div>
             <div class="content article-body">
-              <p class="subtitle">A project for portfolio on Vue using Firebase as backend (authorization, database etc.), state management Pinia</p>
-              <p>Metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. In hac habitasse platea
-                dictumst vestibulum rhoncus est pellentesque elit. Accumsan lacus vel facilisis volutpat. Non sodales
-                neque sodales ut etiam.
-                Est pellentesque elit ullamcorper dignissim cras tincidunt lobortis feugiat vivamus.</p>
-              <h3 class="has-text-centered">How to properly center tags in bulma?</h3>
-              <p> Proper centering of tags in bulma is done with class: </p>
-              <pre>level-item</pre>
-              Voluptat ut farmacium tellus in metus vulputate. Feugiat in fermentum posuere urna nec. Pharetra convallis
-              posuere morbi leo urna molestie.
-              Accumsan lacus vel facilisis volutpat est velit egestas. Fermentum leo vel orci porta. Faucibus interdum
-              posuere lorem ipsum.<p></p>
+              <p class="subtitle">A frontend project for portfolio. Todo list app with authorization, database. Created
+                with:</p>
+              <ul>
+                <li>Vue 3</li>
+                <li>Vue Router</li>
+                <li>Firebase</li>
+                <li>Pinia</li>
+                <li>Bulma css</li>
+              </ul>
+              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quis debitis blanditiis, eum totam laboriosam
+                quidem vitae. Modi, et quos quod itaque voluptas sed error incidunt beatae consequatur ipsum laborum eius!
+              </p>
+              <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore fugiat, reprehenderit alias suscipit
+              molestias dolorem id sed placeat voluptate deserunt porro nisi, asperiores hic qui. Id ducimus officia velit
+              perferendis, dolor eaque magni modi molestias, quo nisi minus eos veniam fugit qui accusantium recusandae
+              nostrum maiores distinctio corporis neque laborum.</p>
             </div>
           </div>
         </div>

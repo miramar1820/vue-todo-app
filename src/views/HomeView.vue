@@ -1,10 +1,10 @@
 <script setup>
-import { auth } from '@/firebase/config'
+// import { auth } from '@/firebase/config'
 </script>
 
 <template>
   <section class="hero is-medium">
-    
+
     <div class="bg"></div>
     <div class="bg bg2"></div>
     <div class="bg bg3"></div>
@@ -15,10 +15,15 @@ import { auth } from '@/firebase/config'
             Hello
           </p>
           <p class="subtitle is-size-3-desktop">
-            My name is Miras, I am frontend developer,  and this is a my project on Vue3
+            My name is Miras, I am frontend developer, and this is my todo list project on Vue3
             <!-- {{ auth.currentUser }} -->
           </p>
-
+          <RouterLink to="/dashboard" class="button is-rounded is-primary is-outlined">
+            <span has-text-weight-bold>Go to Todos dashboard</span>
+            <span class="icon">
+              <i class="fa fa-arrow-right"></i>
+            </span>
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -28,10 +33,10 @@ import { auth } from '@/firebase/config'
 </template>
 
 <style lang="scss" scoped>
-
 .hero {
   flex: 1;
 }
+
 .bg {
   animation: slide 3s ease-in-out infinite alternate;
   background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);

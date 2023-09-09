@@ -16,7 +16,6 @@
                                 </span>
                             </div>
                             <div class="control">
-
                                 <button type="submit" class="button is-info" :class="{ 'is-loading': fetching }">
                                     <span class="icon">
                                         <i class="fa fa-plus"></i>
@@ -112,6 +111,7 @@ onMounted(async () => {
 const addTodo = async () => {
     if (newTodo.title === '') return;
     fetching.value = true;
+    // console.log("add exposed");
     await todoStore.addTodo(newTodo);
     defaultTodo.title = '';
     fetching.value = false;

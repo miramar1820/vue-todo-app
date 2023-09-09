@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-// import { useAuthStore } from "./user";
+import { useAuthStore } from "./user";
 
 import {
   createTodo,
@@ -14,8 +14,7 @@ export const useTodosStore = defineStore("todosStore", {
     todos: [],
     error: null,
     loadingTodos: false,
-
-    // userLoggedIn: useAuthStore().isLoggedIn,
+    userLoggedIn: useAuthStore().isLoggedIn,
   }),
   getters: {
     todosEmpty: (state) => state.todos.length === 0,
@@ -24,11 +23,6 @@ export const useTodosStore = defineStore("todosStore", {
     isLoading: (state) => state.loadingTodos,
   },
   actions: {
-    init() {
-      const user = this.userStore;
-      console.log(user);
-    },
-
     async fetchTodos() {
       this.loadingTodos = true;
       console.log("fetchTodos exposed");

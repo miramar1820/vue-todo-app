@@ -31,13 +31,7 @@
                         </a>
                         <div class="navbar-dropdown is-boxed">
                             <a class="navbar-item">
-                                About
-                            </a>
-                            <a class="navbar-item">
-                                Jobs
-                            </a>
-                            <a class="navbar-item">
-                                Contact
+                                Example
                             </a>
                             <hr class="navbar-divider">
                             <a class="navbar-item">
