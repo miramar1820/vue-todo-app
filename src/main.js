@@ -5,6 +5,8 @@ import App from "./App.vue";
 import router from "./router";
 import "@/assets/styles.scss";
 
+console.log(import.meta.env.VITE_SOME_VAR);
+
 (async () => {
   const app = createApp(App);
   app.use(createPinia());
