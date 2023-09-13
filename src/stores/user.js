@@ -7,7 +7,7 @@ import {
   loginWithGoogleRedirect,
   logOut,
   createUserAuth,
-} from "../firebase/config";
+} from "@/api/firebase";
 
 export const useAuthStore = defineStore("authStore", {
   state: () => ({

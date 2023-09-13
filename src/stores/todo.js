@@ -7,7 +7,7 @@ import {
   removeDoc,
   updateTodo,
   changeStatusTodo,
-} from "../firebase/config";
+} from "@/api/firebase";
 
 export const useTodosStore = defineStore("todosStore", {
   state: () => ({

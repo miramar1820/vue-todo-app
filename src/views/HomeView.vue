@@ -1,10 +1,5 @@
-<script setup>
-// import { auth } from '@/firebase/config'
-</script>
-
 <template>
   <section class="hero is-medium">
-
     <div class="bg"></div>
     <div class="bg bg2"></div>
     <div class="bg bg3"></div>
@@ -27,8 +22,6 @@
         </div>
       </div>
     </div>
-
-
   </section>
 </template>
 
@@ -68,10 +61,6 @@
   text-align: center;
   // top: 50%;
   // transform: translate(-50%, -50%);
-}
-
-h1 {
-  font-family: monospace;
 }
 
 @keyframes slide {

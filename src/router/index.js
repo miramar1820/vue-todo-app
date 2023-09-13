@@ -5,7 +5,6 @@ import { useAuthStore } from "@/stores/user";
 
 const authCheck = (to, from, next) => {
   const store = useAuthStore();
-  // console.log("authCheck", store.isLoggedIn);
   if (store.isLoggedIn) {
     if (to.name === "login") {
       next({ name: "dashboard" });
@@ -29,9 +28,6 @@ const routes = [
       {
         path: "about",
         name: "about",
-        // route level code-splitting
-        // this generates a separate chunk (About.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () => import("../views/AboutView.vue"),
       },
       {
@@ -44,12 +40,6 @@ const routes = [
         name: "dashboard",
         component: () => import("../views/Dashboard.vue"),
         beforeEnter: authCheck,
-      },
-      {
-        path: "/todos",
-        name: "todos",
-        component: () => import("../views/Todos.vue"),
-        // beforeEnter: authCheck,
       },
       {
         path: "/:pathMatch(.*)*",
